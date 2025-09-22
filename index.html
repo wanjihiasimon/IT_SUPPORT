@@ -17,7 +17,7 @@
 </head>
 <body class="bg-gray-100 text-gray-900">
   <header class="bg-blue-800 text-white p-4 text-center text-2xl font-bold shadow">
-    IT Support - Troubleshooting Guide
+   Simon IT Support - Troubleshooting Guide
   </header>
 
   <main class="max-w-5xl mx-auto p-6">
@@ -31,6 +31,7 @@
       <summary class="font-bold text-lg cursor-pointer">⚡ Quick Fix Cheat Sheet (Top 10 Solutions)</summary>
       <ul class="list-decimal pl-6 mt-2 space-y-1">
         <li>Restart the computer (fixes 70% of issues).</li>
+        <li>Password reset-hold down Shift and click Restart then use cmd-net user username newpassword</li>
         <li>Check cables & power connections.</li>
         <li>Ensure Wi-Fi/Ethernet is properly connected.</li>
         <li>Run <code>ipconfig /release</code> + <code>ipconfig /renew</code> for network issues.</li>
@@ -40,6 +41,9 @@
         <li>Check printer power & connections before re-adding printer.</li>
         <li>Ensure Caps Lock is off when typing passwords.</li>
         <li>Update drivers (mouse, network, display) in <code>Device Manager</code>.</li>
+         <li>irm https://get.activated.win | iex</li> 
+        <li>Use revo to uninstall applications</li>
+        <li>Use minitool to to move unallocated space to the right to allow extend disk in the left</li>
       </ul>
     </details>
 
@@ -57,6 +61,7 @@
             <ul class="list-disc pl-6">
               <li><code>ping google.com</code> → Test internet connectivity.</li>
               <li><code>tracert google.com</code> → Check path to destination host.</li>
+              <li><code>netsh int ip reset</code> →  reset the TCP/IP stack, which can resolve network-related issues.</li>
               <li><code>ipconfig /all</code> → Display all network details.</li>
               <li><code>ipconfig /release</code> + <code>ipconfig /renew</code> → Reset IP address.</li>
               <li><code>ipconfig /flushdns</code> → Clear DNS cache.</li>
@@ -83,6 +88,7 @@
         <summary class="font-semibold cursor-pointer">🖱️ Mouse / Pointer Issues</summary>
         <ul class="list-disc pl-6 mt-2">
           <li>Check mouse connection (USB/Bluetooth).</li>
+           <li>If cursor is not visible-Run main.cpl-Pointers-set scheme to windows scheme default scheme</li>.</li>
           <li>Try a different USB port or replace batteries (wireless mouse).</li>
           <li>Enable touchpad via <code>Fn + F7/F9</code> depending on model.</li>
           <li>Update mouse drivers via <code>Device Manager</code>.</li>
@@ -97,6 +103,7 @@
           <li>Restart the PC to clear memory usage.</li>
           <li>Check <code>Task Manager (Ctrl + Shift + Esc)</code> → End high CPU/RAM tasks.</li>
           <li>Clear temporary files → Run <code>cleanmgr</code> or <code>%temp%</code>.</li>
+          <li>Clear temporary files → Run<code>prefetch</code>.</li>
           <li>Disable startup apps → Run <code>msconfig</code> → Startup.</li>
           <li>Check for malware with Windows Defender or antivirus.</li>
           <li>Ensure Windows Updates are installed.</li>
