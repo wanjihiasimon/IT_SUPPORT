@@ -5,192 +5,196 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Simon IT Support - Troubleshooting Guide</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="icon" type="image/png" href="favicon.png"> <!-- 👈 Favicon line -->
-  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="icon" type="image/png" href="favicon.png">
   <script>
+    // 🔎 Search function with auto-expand
     function searchIssues() {
       let input = document.getElementById("search").value.toLowerCase();
       let issues = document.querySelectorAll(".issue");
       issues.forEach(issue => {
-        issue.style.display = issue.textContent.toLowerCase().includes(input) ? "block" : "none";
+        if (issue.textContent.toLowerCase().includes(input)) {
+          issue.style.display = "block";
+          issue.open = true;
+        } else {
+          issue.style.display = "none";
+        }
       });
+    }
+
+    // 📋 Copy to clipboard
+    function copyCommand(el) {
+      const text = el.previousElementSibling.innerText;
+      navigator.clipboard.writeText(text).then(() => {
+        el.innerText = "✅ Copied!";
+        setTimeout(() => el.innerText = "📋 Copy", 1500);
+      });
+    }
+
+    // 🌙 Dark mode toggle
+    function toggleDark() {
+      document.documentElement.classList.toggle("dark");
     }
   </script>
 </head>
-<body class="bg-gray-100 text-gray-900">
-  <header class="bg-blue-800 text-white p-4 text-center text-2xl font-bold shadow">
-   Simon IT Support - Troubleshooting Guide
+<body class="bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-gray-100">
+  <header class="bg-blue-800 text-white p-4 text-center text-2xl font-bold shadow dark:bg-blue-900">
+    Simon IT Support - Troubleshooting Guide
+    <button onclick="toggleDark()" class="ml-4 px-3 py-1 bg-gray-700 rounded text-sm hover:bg-gray-600">
+      🌙 Toggle Dark Mode
+    </button>
   </header>
 
   <main class="max-w-5xl mx-auto p-6">
+    <!-- Search Bar -->
     <div class="mb-6">
       <input id="search" onkeyup="searchIssues()" type="text" placeholder="Search an issue..." 
-             class="w-full p-3 border rounded-lg shadow">
+             class="w-full p-3 border rounded-lg shadow text-black">
     </div>
 
     <!-- Quick Fix Cheat Sheet -->
-    <details open class="bg-green-100 border-l-4 border-green-600 p-4 rounded-lg shadow mb-6">
-      <summary class="font-bold text-lg cursor-pointer">⚡ Quick Fix Cheat Sheet (Top Solutions)</summary>
+    <details open class="bg-green-100 border-l-4 border-green-600 p-4 rounded-lg shadow mb-6 dark:bg-green-900 dark:border-green-400">
+      <summary class="font-bold text-lg cursor-pointer">⚡ Quick Fix Cheat Sheet (Top 10 Solutions)</summary>
       <ul class="list-decimal pl-6 mt-2 space-y-1">
-        <li><code>power button options</code> → 1. Disable Fast Startup Go to Control Panel > Power Options > Choose what the power button does Click<br> “Change settings that are currently unavailable” Uncheck “Turn on fast startup” </li>
+        <li>Disable Fast Startup: <code>Control Panel → Power Options → Choose what the power button does → Uncheck "Turn on fast startup"</code></li>
         <li>Restart the computer (fixes 70% of issues).</li>
-        <li>Restrict usb drive Computer Configuration > Administrative Templates > System > Removable Storage Access</li>
-        <li>Password reset-hold down Shift and click Restart then use cmd-net user username newpassword</li>
+        <li>Password reset: Hold Shift + Restart → Command Prompt → <code>net user username newpassword</code></li>
         <li>Check cables & power connections.</li>
         <li>Ensure Wi-Fi/Ethernet is properly connected.</li>
-        <li>Run <code>ipconfig /release</code> + <code>ipconfig /renew</code> for network issues.</li>
-        <li>Clear temporary files (<code>%temp%</code>).</li>
+        <li><code>ipconfig /release</code> + <code>ipconfig /renew</code> for network issues. <button onclick="copyCommand(this)" class="ml-2 px-2 py-1 bg-gray-200 rounded">📋 Copy</button></li>
+        <li>Clear temporary files → <code>%temp%</code></li>
         <li>Run Windows Update & restart.</li>
-        <li>Check Task Manager (<code>Ctrl + Shift + Esc</code>) → End unresponsive tasks.</li>
-        <li>Check printer power & connections before re-adding printer.</li>
-        <li>Ensure Caps Lock is off when typing passwords.</li>
-        <li>Update drivers (mouse, network, display) in <code>Device Manager</code>.</li>
-         <li>irm https://get.activated.win | iex</li> 
-        <li>Use revo to uninstall applications</li>
-        <li>Use minitool to to move unallocated space to the right to allow extend disk in the left</li>
+        <li>Task Manager → End unresponsive tasks (<code>Ctrl+Shift+Esc</code>).</li>
+        <li>Check printer power & re-add printer if necessary.</li>
+        <li>Update drivers in <code>Device Manager</code>.</li>
+        <li>Use Revo Uninstaller for stubborn apps.</li>
+        <li>Use MiniTool to manage partitions.</li>
       </ul>
     </details>
 
     <!-- Issues Section -->
     <section class="space-y-4">
 
-      <!-- Network Issues -->
-      <details class="issue bg-white p-4 rounded-lg shadow">
+      <!-- 🌐 Network Issues -->
+      <details class="issue bg-white p-4 rounded-lg shadow dark:bg-gray-800">
         <summary class="font-semibold cursor-pointer">🌐 Network Connectivity Issues</summary>
         <ul class="list-disc pl-6 mt-2">
-          <li>Check physical connection: LAN cable, Wi-Fi signal strength.</li>
-          <li>Restart router/switch if multiple users affected.</li>
-          <li>Disable/enable network adapter from <code>Control Panel → Network Settings</code>.</li>
-          <li><b>Useful Commands:</b>
+          <li>Check LAN cable/Wi-Fi signal.</li>
+          <li>Restart router/switch if multiple users are affected.</li>
+          <li>Disable/enable adapter: <code>Control Panel → Network Settings</code>.</li>
+          <li><b>Commands:</b>
             <ul class="list-disc pl-6">
-              <li><code>netsh wlan show ?</code> → Help for netsh commands</li>
-              <li><code>ping google.com</code> → Test internet connectivity.</li>
-              <li><code>tracert google.com</code> → Check path to destination host.</li>
-              <li><code>netsh int ip reset</code> →  reset the TCP/IP stack, which can resolve network-related issues.</li>
-              <li><code>ipconfig /all</code> → Display all network details.</li>
-              <li><code>ipconfig /release</code> + <code>ipconfig /renew</code> → Reset IP address.</li>
-              <li><code>ipconfig /flushdns</code> → Clear DNS cache.</li>
-              <li><code>nslookup example.com</code> → Test DNS resolution.</li>
-              <li><code>netstat -an</code> → Check active connections.</li>
-              <li><code>netsh wlan show wlanreport</code> → Connection successes and failures, Signal strength, Error messages, Disconnection reasons, Wi-Fi adapter performance, Session durations</li>
+              <li><code>ping google.com</code> → Test connectivity. <button onclick="copyCommand(this)" class="ml-2 px-2 py-1 bg-gray-200 rounded">📋 Copy</button></li>
+              <li><code>tracert google.com</code> → Trace route. <button onclick="copyCommand(this)" class="ml-2 px-2 py-1 bg-gray-200 rounded">📋 Copy</button></li>
+              <li><code>netsh int ip reset</code> → Reset TCP/IP stack. <button onclick="copyCommand(this)" class="ml-2 px-2 py-1 bg-gray-200 rounded">📋 Copy</button></li>
+              <li><code>ipconfig /flushdns</code> → Clear DNS cache. <button onclick="copyCommand(this)" class="ml-2 px-2 py-1 bg-gray-200 rounded">📋 Copy</button></li>
+              <li><code>netstat -an</code> → Active connections. <button onclick="copyCommand(this)" class="ml-2 px-2 py-1 bg-gray-200 rounded">📋 Copy</button></li>
             </ul>
           </li>
         </ul>
       </details>
 
-      <!-- Computer Power Issues -->
-      <details class="issue bg-white p-4 rounded-lg shadow">
+      <!-- ⚡ Power Issues -->
+      <details class="issue bg-white p-4 rounded-lg shadow dark:bg-gray-800">
         <summary class="font-semibold cursor-pointer">⚡ Computer / Power Issues</summary>
         <ul class="list-disc pl-6 mt-2">
           <li>Ensure power cable is firmly connected.</li>
-          <li>Test wall socket with another device.</li>
-          <li>Remove laptop battery (if removable) and reconnect.</li>
+          <li>Test socket with another device.</li>
           <li>Check UPS/extension cable functionality.</li>
+          <li>Remove & reseat battery (if removable).</li>
         </ul>
       </details>
 
-      <!-- Mouse & Pointer Issues -->
-      <details class="issue bg-white p-4 rounded-lg shadow">
+      <!-- 🖱️ Mouse Issues -->
+      <details class="issue bg-white p-4 rounded-lg shadow dark:bg-gray-800">
         <summary class="font-semibold cursor-pointer">🖱️ Mouse / Pointer Issues</summary>
         <ul class="list-disc pl-6 mt-2">
-          <li>Check mouse connection (USB/Bluetooth).</li>
-           <li>If cursor is not visible-Run main.cpl-Pointers-set scheme to windows scheme default scheme</li>.</li>
-          <li>Try a different USB port or replace batteries (wireless mouse).</li>
-          <li>Enable touchpad via <code>Fn + F7/F9</code> depending on model.</li>
-          <li>Update mouse drivers via <code>Device Manager</code>.</li>
-          <li>If cursor is frozen → Restart PC with <code>Ctrl + Alt + Del → Restart</code>.</li>
+          <li>Check USB/Bluetooth connection.</li>
+          <li>If cursor missing: Run <code>main.cpl</code> → Pointers → Reset scheme.</li>
+          <li>Try a different port or replace batteries.</li>
+          <li>Enable touchpad (Fn+F7/F9).</li>
+          <li>Update mouse drivers in Device Manager.</li>
+          <li>If frozen → Restart (Ctrl+Alt+Del → Restart).</li>
         </ul>
       </details>
 
-      <!-- Slow PC Issues -->
-      <details class="issue bg-white p-4 rounded-lg shadow">
+      <!-- 🐢 Slow PC -->
+      <details class="issue bg-white p-4 rounded-lg shadow dark:bg-gray-800">
         <summary class="font-semibold cursor-pointer">🐢 Slow PC Performance</summary>
         <ul class="list-disc pl-6 mt-2">
-          <li>Restart the PC to clear memory usage.</li>
-          <li>Check <code>Task Manager (Ctrl + Shift + Esc)</code> → End high CPU/RAM tasks.</li>
-          <li>Clear temporary files → Run <code>cleanmgr</code> or <code>%temp%</code>.</li>
-          <li>Clear temporary files → Run<code>prefetch</code>.</li>
-          <li>Disable startup apps → Run <code>msconfig</code> → Startup.</li>
-          <li>Check for malware with Windows Defender or antivirus.</li>
-          <li>Ensure Windows Updates are installed.</li>
-          <li>Defragment disk (HDD only) Anayze first to defrag should be above 10% → Run <code>dfrgui</code>.</li>
-          <li>If still slow → Consider RAM upgrade or SSD installation.</li>
+          <li>Restart to clear memory usage.</li>
+          <li>Task Manager → End high usage tasks.</li>
+          <li>Run <code>cleanmgr</code>, <code>%temp%</code>, and <code>prefetch</code>.</li>
+          <li>Disable startup apps (msconfig).</li>
+          <li>Run antivirus scan.</li>
+          <li>Install updates.</li>
+          <li>Defrag HDD (<code>dfrgui</code>).</li>
+          <li>Upgrade RAM / use SSD for speed.</li>
         </ul>
       </details>
 
-      <!-- Blocking USB Ports -->
-      <details class="issue bg-white p-4 rounded-lg shadow">
+      <!-- 🔒 USB Control -->
+      <details class="issue bg-white p-4 rounded-lg shadow dark:bg-gray-800">
         <summary class="font-semibold cursor-pointer">🔒 Blocking / Controlling USB Devices</summary>
         <ul class="list-disc pl-6 mt-2">
-          <li>Disable USB storage via <code>Device Manager</code> → Universal Serial Bus Controllers → Disable device.</li>
-          <li>Use Group Policy (<code>gpedit.msc</code>): 
-            <ul class="list-disc pl-6">
-              <li><code>Computer Config → Admin Templates → System → Removable Storage Access</code></li>
-              <li>Set "Deny all access" for removable storage.</li>
-            </ul>
-          </li>
-          <li>Registry method (advanced):  
-            <code>HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\USBSTOR</code> → Set "Start" value to 4 (disable).</li>
-          <li>For enterprise: Use endpoint security software (e.g., Symantec, BitLocker policies).</li>
+          <li>Disable USB storage via Device Manager.</li>
+          <li>Use Group Policy: <code>gpedit.msc → Admin Templates → System → Removable Storage Access</code>.</li>
+          <li>Registry: <code>HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\USBSTOR</code> → Set Start=4.</li>
+          <li>Enterprise: Endpoint Security / DLP tools.</li>
         </ul>
       </details>
 
-      <!-- Windows Run Commands -->
-      <details class="issue bg-white p-4 rounded-lg shadow">
-        <summary class="font-semibold cursor-pointer">💻 Useful Windows (Win + R) Commands</summary>
+      <!-- 💻 Advanced Cases -->
+      <details class="issue bg-white p-4 rounded-lg shadow dark:bg-gray-800">
+        <summary class="font-semibold cursor-pointer">🛠️ Advanced IT Troubleshooting Cases</summary>
         <ul class="list-disc pl-6 mt-2">
-          <li><code>cmd</code> → Command Prompt.</li>
-          <li><code>services.msc</code> → Windows services.</li>
-          <li><code>eventvwr</code> → Event Viewer logs.</li>
-          <li><code>msconfig</code> → System Configuration.</li>
-          <li><code>devmgmt.msc</code> → Device Manager.</li>
-          <li><code>ncpa.cpl</code> → Network connections.</li>
-          <li><code>taskmgr</code> → Task Manager.</li>
-          <li><code>control</code> → Control Panel.</li>
-          <li><code>appwiz.cpl</code> → Uninstall programs.</li>
-          <li><code>diskmgmt.msc</code> → Disk Management.</li>
+          <li><b>Blue Screen of Death (BSOD):</b> Run <code>whoami /scannow</code>, check drivers in Device Manager, check dump logs in <code>C:\Windows\Minidump</code>.</li>
+          <li><b>Windows Boot Issues:</b> Boot from recovery → <code>bootrec /fixmbr</code>, <code>bootrec /fixboot</code>, <code>bootrec /rebuildbcd</code>.</li>
+          <li><b>Disk Errors:</b> Run <code>chkdsk /f /r</code> on affected drive.</li>
+          <li><b>Application Crashes:</b> Check Event Viewer (<code>eventvwr.msc</code>) under Application logs.</li>
+          <li><b>Remote Desktop Issues:</b> Confirm RDP enabled (<code>sysdm.cpl</code>), allow port 3389 in firewall, check NLA settings.</li>
+          <li><b>Antivirus/Security:</b> Check Windows Security Center → Virus & threat protection, update signatures, scan logs.</li>
         </ul>
       </details>
 
-      <!-- Email Issues -->
-      <details class="issue bg-white p-4 rounded-lg shadow">
+      <!-- 📧 Email Issues -->
+      <details class="issue bg-white p-4 rounded-lg shadow dark:bg-gray-800">
         <summary class="font-semibold cursor-pointer">📧 Email Problems</summary>
         <ul class="list-disc pl-6 mt-2">
           <li>Check internet connection.</li>
-          <li>Confirm email/password are correct.</li>
-          <li>Clear cache if using webmail.</li>
-          <li>Check mailbox quota (full mailbox causes failure).</li>
+          <li>Verify credentials.</li>
+          <li>Clear browser cache.</li>
+          <li>Check mailbox quota.</li>
           <li>Outlook: Run <code>outlook.exe /safe</code>.</li>
         </ul>
       </details>
 
-      <!-- Login Issues -->
-      <details class="issue bg-white p-4 rounded-lg shadow">
+      <!-- 🔑 Login -->
+      <details class="issue bg-white p-4 rounded-lg shadow dark:bg-gray-800">
         <summary class="font-semibold cursor-pointer">🔑 Login / Password Issues</summary>
         <ul class="list-disc pl-6 mt-2">
           <li>Ensure Caps Lock is off.</li>
-          <li>Try resetting password via self-service portal.</li>
-          <li>If locked out, call IT helpdesk.</li>
-          <li>Domain users: Ensure PC is connected to company network.</li>
+          <li>Use self-service password reset.</li>
+          <li>If locked out → Contact IT.</li>
+          <li>Domain: Ensure PC is on company network.</li>
         </ul>
       </details>
 
-      <!-- Printer Issues -->
-      <details class="issue bg-white p-4 rounded-lg shadow">
+      <!-- 🖨️ Printer -->
+      <details class="issue bg-white p-4 rounded-lg shadow dark:bg-gray-800">
         <summary class="font-semibold cursor-pointer">🖨️ Printer Not Working</summary>
         <ul class="list-disc pl-6 mt-2">
-          <li>Check printer is powered on & cables connected.</li>
-          <li>Ensure correct printer is set as default.</li>
+          <li>Check printer power/cables.</li>
+          <li>Ensure default printer is correct.</li>
           <li>Clear print queue (<code>control printers</code>).</li>
-          <li>Restart printer service (<code>services.msc</code> → Print Spooler).</li>
-          <li>Test with another computer.</li>
+          <li>Restart Print Spooler service.</li>
+          <li>Test with another PC.</li>
         </ul>
       </details>
 
     </section>
   </main>
 
-  <footer class="bg-gray-800 text-white text-center p-4 mt-6">
+  <footer class="bg-gray-800 text-white text-center p-4 mt-6 dark:bg-gray-950">
     &copy; 2025 IT Support | Simon Helpdesk
   </footer>
 </body>
